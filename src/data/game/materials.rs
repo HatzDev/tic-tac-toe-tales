@@ -13,10 +13,10 @@ pub struct BlockMaterial{
 
 impl Material for BlockMaterial {
     fn fragment_shader() -> ShaderRef{
-        "shaders/blocks_shader.wgsl".into()
+        "game/shaders/blocks_shader.wgsl".into()
     }
     fn vertex_shader() -> ShaderRef{
-        "shaders/blocks_shader.wgsl".into()
+        "game/shaders/blocks_shader.wgsl".into()
     }
 }
 

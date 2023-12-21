@@ -1,9 +1,9 @@
 use bevy::{prelude::*, render::mesh::Indices, render::render_resource::PrimitiveTopology};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
-include!("data/blocks.rs");
-include!("data/chunk.rs");
-include!("data/materials.rs");
+include!("data/game/blocks.rs");
+include!("data/game/chunk.rs");
+include!("data/game/materials.rs");
 
 fn main() {
     App::new()
