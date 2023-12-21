@@ -19,3 +19,15 @@ impl Material for BlockMaterial {
         "shaders/blocks_shader.wgsl".into()
     }
 }
+
+fn update_block_material(mut materials: ResMut<Assets<BlockMaterial>>, query: Query<(&mut Transform, &DirectionalLight)>, _ambient_light: Option<Res<AmbientLight>>){
+    for (transform, light) in query.iter() {
+        for (_handle, material) in materials.iter_mut() {
+            material.sun_direction = -transform.forward();
+            material.sun_color = light.color;
+            if let Some(light) = &_ambient_light {
+                material.ambient_color = light.color;
+            }
+        }
+    }
+}
