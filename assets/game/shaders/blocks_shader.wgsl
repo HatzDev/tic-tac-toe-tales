@@ -17,7 +17,7 @@ struct VertexInput {
 
 struct VertexOutput {
     @builtin(position) clip_position: vec4<f32>,
-    @location(1) world_normal: vec3<f32>,
+    @location(1) object_normal: vec3<f32>,
 };
 
 @vertex
@@ -28,13 +28,13 @@ fn vertex(input: VertexInput) -> VertexOutput {
     let normal_matrix = transpose(model_matrix);
 
     out.clip_position = mesh_position_local_to_clip(model_matrix,vec4<f32>(input.position, 1.0));
-    out.world_normal = mesh_normal_local_to_world(input.normal, input.instance_index);
+    out.object_normal = input.normal;
     return out;
 }
 
 @fragment
 fn fragment(out: VertexOutput) -> @location(0) vec4<f32> {
-    let NdotL: f32 = dot(material.sun_dir, out.world_normal);
+    let NdotL: f32 = dot(normalize(material.sun_dir), out.world_normal);
     let color: vec4<f32> = NdotL * material.sun_color + material.ambient_color;
 
     return color;

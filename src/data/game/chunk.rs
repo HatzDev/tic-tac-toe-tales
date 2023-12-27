@@ -2,6 +2,7 @@ pub struct ChunkData{
     size: [i32; 3],
     vertices: Vec<[f32; 3]>,
     triangles: Vec<u32>,
+    uvs: Vec<[f32; 2]>,
     blocks: HashMap<[i32; 3], BlockData>
 }
 
@@ -11,6 +12,7 @@ impl ChunkData{
             size: [16, 16, 16],
             vertices: Vec::new(),
             triangles: Vec::new(),
+            uvs: Vec::new(),
             blocks: HashMap::new()
         };
         Self::initial_chunk_blocks(&mut chunk);

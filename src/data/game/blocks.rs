@@ -3,10 +3,10 @@ use bevy::utils::HashMap;
 static DIRECTIONS: [[i32; 3]; 6] = [
     [0, 1, 0],  // Up Direction
     [0, -1, 0], // Down Direction
-    [0, 0, -1], // North Direction
-    [0, 0, 1],  // South Direction
-    [-1, 0, 0], // West Direction
-    [1, 0, 0],  // East Direction
+    [0, 0, 1],  // North Direction
+    [0, 0, -1], // South Direction
+    [1, 0, 0],  // West Direction
+    [-1, 0, 0], // East Direction
 ];
 
 #[derive(Eq, PartialEq, Hash, Debug, Clone)]
@@ -20,6 +20,7 @@ pub struct BlockData{
     solid: bool,
     vertices: Vec<[f32; 3]>,
     triangles: Vec<[u32 ; 6]>,
+    uvs: Vec<[f32; 2]>,
     block_type: BlockTypes,
 }
 
@@ -29,21 +30,29 @@ impl BlockData{
             solid: true,
             vertices: vec![
                 [0.0, 0.0, 0.0],
+                [1.0, 0.0, 0.0],
                 [0.0, 1.0, 0.0],
                 [1.0, 1.0, 0.0],
-                [1.0, 0.0, 0.0],
-                [1.0, 0.0, 1.0],
-                [1.0, 1.0, 1.0],
-                [0.0, 1.0, 1.0],
-                [0.0, 0.0, 1.0],
+                [1.0, 0.0, -1.0],
+                [0.0, 0.0, -1.0],
+                [1.0, 1.0, -1.0],
+                [0.0, 1.0, -1.0],
             ],
             triangles: vec![
-                [2, 1, 5, 5, 1, 6], // Up Face
-                [7, 0, 3, 3, 4, 7], // Down Face
-                [0, 1, 3, 3, 1, 2], // North Face
-                [4, 5, 7, 7, 5, 6], // South Face
-                [7, 6, 0, 0, 6, 1], // West Face
-                [3, 2, 4, 4, 2, 5], // East Face
+                [2, 3, 7, 7, 3, 6], // Up Face
+                [5, 4, 0, 0, 4, 1], // Down Face
+                [0, 1, 2, 2, 1, 3], // North Face
+                [4, 5, 6, 6, 5, 7], // South Face
+                [1, 4, 3, 3, 4, 6], // West Face
+                [5, 0, 7, 7, 0, 2], // East Face
+            ],
+            uvs: vec![
+                [0.0, 0.0],
+                [1.0, 0.0],
+                [0.0, 1.0],
+                [0.0, 1.0],
+                [1.0, 0.0],
+                [1.0, 1.0],
             ],
             block_type: BlockTypes::Full
         };
@@ -51,6 +60,7 @@ impl BlockData{
             solid: false,
             vertices: vec![],
             triangles: vec![],
+            uvs: vec![],
             block_type: BlockTypes::Air
         };
         match block_type {
@@ -77,6 +87,7 @@ impl BlockData{
                     ];
                     chunk.vertices.push(modified_vertex);
                     chunk.triangles.push(*vertex_index);
+                    chunk.uvs.push(block_data.uvs[index]);
                     *vertex_index += 1;
                 }
             }
