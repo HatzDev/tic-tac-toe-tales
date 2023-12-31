@@ -1,15 +1,15 @@
 #import bevy_pbr::mesh_functions::{get_model_matrix, mesh_position_local_to_clip, mesh_normal_local_to_world}
 #import bevy_pbr::mesh_view_bindings::globals
-#import "game/shaders/shader_utils.wgsl"::rotateUVs
-#import "game/shaders/shader_utils.wgsl"::flipUVsY
-#import "game/shaders/shader_utils.wgsl"::flipUVsX
+#import "game/shaders/shader_utils.wgsl"::rotate_uvs
+#import "game/shaders/shader_utils.wgsl"::flip_uv_y
+#import "game/shaders/shader_utils.wgsl"::flip_uv_x
 
-struct BlockMaterial {
+struct BlockHighlighterMaterial {
     color: vec4<f32>,
 };
 
 @group(1) @binding(0)
-var<uniform> material: BlockMaterial;
+var<uniform> material: BlockHighlighterMaterial;
 @group(1) @binding(1)
 var texture: texture_2d<f32>;
 @group(1) @binding(2)
@@ -51,13 +51,13 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     var textures: array<vec4<f32>, 8>;
 
     uvs[0] = vec2<f32>(in.uvs.x, fract(in.uvs.y - globals.time));
-    uvs[1] = rotateUVs(vec2<f32>(in.uvs.x, fract(in.uvs.y + globals.time)), -180.0);
-    uvs[2] = rotateUVs(vec2<f32>(fract(in.uvs.x - globals.time), in.uvs.y), 90.0);
-    uvs[3] = rotateUVs(vec2<f32>(fract(in.uvs.x + globals.time), in.uvs.y), -90.0);
+    uvs[1] = rotate_uvs(vec2<f32>(in.uvs.x, fract(in.uvs.y + globals.time)), -180.0);
+    uvs[2] = rotate_uvs(vec2<f32>(fract(in.uvs.x - globals.time), in.uvs.y), 90.0);
+    uvs[3] = rotate_uvs(vec2<f32>(fract(in.uvs.x + globals.time), in.uvs.y), -90.0);
 
     for (var i = 0; i < 4; i++) {
         textures[i] = textureSample(texture, texture_sampler, uvs[i]);
-        textures[i + 4] = textureSample(texture, texture_sampler, flipUVsX(uvs[i]));
+        textures[i + 4] = textureSample(texture, texture_sampler, flip_uv_x(uvs[i]));
     }
     
     if (abs(in.object_normal.x) == 1.0) {
@@ -66,10 +66,6 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         color = textures[0] + textures[1] + textures[2] + textures[3];
     }else{
         color = textures[0] + textures[1] + textures[6] + textures[7];
-    }
-    
-    if (color.a < 1.0) {
-        discard;
     }
     
     return color * material.color;

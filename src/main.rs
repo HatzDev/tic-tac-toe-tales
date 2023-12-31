@@ -1,10 +1,10 @@
-use bevy::{prelude::*, render::mesh::Indices, render::render_resource::PrimitiveTopology};
+use bevy::{prelude::*, render::mesh::Indices, render::render_resource::PrimitiveTopology, asset::ReflectAsset};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 include!("data/game/blocks.rs");
 include!("data/game/chunk.rs");
 include!("data/game/materials.rs");
-include!("data/editor/block_highlighter.rs");
+include!("data/editor/world_editing.rs");
 
 fn main() {
     App::new()
@@ -35,9 +35,12 @@ fn main() {
     .add_plugins( MaterialPlugin::<BlockMaterial>::default())
     .add_systems(Update, update_block_material) */
     // Editor Code
-    .register_type::<BlockHighlighterMaterial>()
-    .add_systems(Startup, BlockHighlighter::create_block_highlighter)
-    .add_plugins(MaterialPlugin::<BlockHighlighterMaterial>::default())
+    /* .register_type::<BlockHighlighterMaterial>()
+    .add_systems(Startup, BlockHighlighter::create)
+    .add_plugins(MaterialPlugin::<BlockHighlighterMaterial>::default()) */
+    .add_plugins(MaterialPlugin::<AreaHighlighterMaterial>::default())
+    .add_systems(Startup, AreaHighlighter::create)
+    .add_systems(Update, update_area_highlighter_material)
     // Running App
     .run();
 }

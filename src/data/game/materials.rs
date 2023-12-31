@@ -20,12 +20,16 @@ impl Material for BlockMaterial {
     }
 }
 
-fn update_block_material(mut materials: ResMut<Assets<BlockMaterial>>, query: Query<(&mut Transform, &DirectionalLight)>, _ambient_light: Option<Res<AmbientLight>>){
-    for (transform, light) in query.iter() {
-        for (_handle, material) in materials.iter_mut() {
+fn update_block_material(
+    mut materials: ResMut<Assets<BlockMaterial>>,
+    query: Query<(&Handle<BlockMaterial>, &mut Transform, &DirectionalLight)>,
+    ambient_light: Option<Res<AmbientLight>>
+){
+    for (material_handle, transform, light) in query.iter() {
+        if let Some(material) = materials.get_mut(material_handle){
             material.sun_direction = -transform.forward();
             material.sun_color = light.color;
-            if let Some(light) = &_ambient_light {
+            if let Some(light) = &ambient_light {
                 material.ambient_color = light.color;
             }
         }
