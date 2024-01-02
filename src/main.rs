@@ -35,9 +35,11 @@ fn main() {
     .add_plugins( MaterialPlugin::<BlockMaterial>::default())
     .add_systems(Update, update_block_material) */
     // Editor Code
-    /* .register_type::<BlockHighlighterMaterial>()
+    /* .register_asset_reflect::<BlockHighlighterMaterial>()
+    .register_type::<BlockHighlighterMaterial>()
     .add_systems(Startup, BlockHighlighter::create)
     .add_plugins(MaterialPlugin::<BlockHighlighterMaterial>::default()) */
+    .register_asset_reflect::<AreaHighlighterMaterial>()
     .add_plugins(MaterialPlugin::<AreaHighlighterMaterial>::default())
     .add_systems(Startup, AreaHighlighter::create)
     .add_systems(Update, update_area_highlighter_material)

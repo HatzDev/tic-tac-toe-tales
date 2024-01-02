@@ -53,7 +53,7 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     var uvs: array<array<vec2<f32>, 4>, 3>;
     var textures: array<array<vec4<f32>, 4>, 3>;
     let background_color: vec4<f32> = vec4(0.0, 0.1, 1.0, 0.3);
-    let time: f32 = globals.time * -0.7;
+    let time: f32 = globals.time * -0.5;
 
     uvs[0] = set_uvs(in.uvs, vec2<f32>(material.scale.z, material.scale.y), time);
     uvs[1] = set_uvs(in.uvs, vec2<f32>(material.scale.x, material.scale.y), -time);
@@ -73,7 +73,10 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         color += set_textures(in.uvs, vec2<f32>(material.scale.x, material.scale.z), textures[2]);
     }
 
-    return color * material.color + background_color;
+    color = color * material.color;
+    color = mix(background_color, color, color.a);
+
+    return color;
 }
 
 fn set_uvs(uvs: vec2<f32>, axis: vec2<f32>, time: f32) -> array<vec2<f32>, 4> {
@@ -91,16 +94,16 @@ fn set_textures(uvs: vec2<f32>, axis: vec2<f32>, textures: array<vec4<f32>, 4>) 
     var color: vec4<f32> = vec4<f32>(0.0, 0.0, 0.0, 0.0);
 
     if((1.0 - uvs.x) * axis.x < 1.0){
-        color += textures[0];
+        color = max(color, textures[0]);
     }
     if(uvs.x * axis.x < 1.0){
-        color += textures[1];
+        color = max(color, textures[1]);
     }
     if((1.0 - uvs.y) * axis.y < 1.0){
-        color += textures[2];
+        color = max(color, textures[2]);
     }
     if(uvs.y * axis.y < 1.0){
-        color += textures[3];
+        color = max(color, textures[3]);
     }
 
     return color;

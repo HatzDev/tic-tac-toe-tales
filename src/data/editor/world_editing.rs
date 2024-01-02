@@ -11,7 +11,7 @@ impl Highlighter{
         commands.spawn(MaterialMeshBundle {
             mesh: mesh,
             material: materials.add(material),
-            transform: Transform::from_xyz(1.0, 2.5, 2.6)
+            transform: Transform::from_xyz(0.5, 1.8, 2.2)
                 .with_rotation(Quat::from_euler(EulerRot::XYZ, 0.0, -45.0, 0.0)),
             ..Default::default()
         });

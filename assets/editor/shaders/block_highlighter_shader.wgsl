@@ -61,11 +61,11 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     }
     
     if (abs(in.object_normal.x) == 1.0) {
-        color = textures[4] + textures[5] + textures[6] + textures[7];
-    }else if(abs(in.object_normal.z) == 1.0) {
-        color = textures[0] + textures[1] + textures[2] + textures[3];
-    }else{
-        color = textures[0] + textures[1] + textures[6] + textures[7];
+        color = max(max(textures[4], textures[5]), max(textures[6], textures[7]));
+    } else if(abs(in.object_normal.z) == 1.0) {
+        color = max(max(textures[0], textures[1]), max(textures[2], textures[3]));
+    } else {
+        color = max(max(textures[0], textures[1]), max(textures[6], textures[7]));
     }
     
     return color * material.color;
